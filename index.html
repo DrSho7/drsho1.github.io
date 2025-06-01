@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Big Surprise For You</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+  <h1>Big Surprise For You</h1>
+  <button id="pressBtn">Press Now</button>
+  <div id="timer" class="hidden"></div>
+  <div id="message" class="hidden"></div>
+</div>
+
+<!-- Sound effect -->
+<audio id="alarmSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+  color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Container */
+.container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 255, 153, 0.5);
+  max-width: 400px;
+  width: 90%;
+}
+
+/* Title */
+h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: #00ff99;
+  text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+  animation: flicker 2s infinite alternate;
+}
+
+/* Flicker animation for title */
+@keyframes flicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Button */
+button {
+  padding: 15px 30px;
+  font-size: 1.1em;
+  color: #111;
+  background: #00ff99;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #00cc77;
+  transform: scale(1.05);
+}
+
+/* Timer & Message */
+#timer, #message {
+  margin-top: 20px;
+  font-size: 1.4em;
+  color: #00ff99;
+  text-shadow: 0 0 10px #00ff99;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.5s ease;
+}
+
+#timer.show, #message.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Message bounce animation */
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+#message.bounce {
+  animation: bounceIn 0.8s ease;
+}
+
+/* Hidden State */
+.hidden {
+  display: none;
+}
+const pressBtn = document.getElementById('pressBtn');
+const timer = document.getElementById('timer');
+const message = document.getElementById('message');
+const alarmSound = document.getElementById('alarmSound');
+
+pressBtn.addEventListener('click', () => {
+  pressBtn.classList.add('hidden');
+  timer.classList.remove('hidden');
+  timer.classList.add('show');
+
+  let countdown = 5;
+  timer.textContent = `Timer: ${countdown} seconds`;
+
+  const interval = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      timer.textContent = `Timer: ${countdown} seconds`;
+    } else {
+      clearInterval(interval);
+      timer.classList.remove('show');
+      timer.classList.add('hidden');
+
+      // Show final message
+      message.classList.remove('hidden');
+      message.classList.add('show', 'bounce');
+      message.textContent = 'You Are All Data Got Hacked By Dr Sho';
+      message.style.color = '#ff3333';
+      message.style.textShadow = '0 0 20px #ff3333';
+
+      // Play sound effect
+      alarmSound.play();
+    }
+  }, 1000);
+});
